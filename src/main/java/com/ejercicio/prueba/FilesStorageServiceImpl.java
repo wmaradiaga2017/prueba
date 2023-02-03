@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -25,25 +26,25 @@ import org.springframework.web.multipart.MultipartFile;
  * @author walter.maradiaga
  */
 @Service
+@Slf4j
 public class FilesStorageServiceImpl implements FilesStorageService {
 
     private final Path root = Paths.get("archivos");
 
     @Override
-    public void creardirectorio(String ruta) {
-        if (!new File(ruta).exists()) {
-            new File(ruta).mkdir();
+    public void creardirectorio() {
+        try {
+            Files.createDirectories(root);
+        } catch (IOException e) {
+            throw new RuntimeException("Problemas al crear el directorio");
         }
     }
 
     @Override
-    public void guardararchivo(MultipartFile file, String ruta) {
+    public void guardararchivo(MultipartFile file) {
 
         try {
-            String orgName = file.getOriginalFilename();
-            String filePath = ruta + orgName;
-            File dest = new File(filePath);
-            file.transferTo(dest);
+            Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
         } catch (Exception e) {
             if (e instanceof FileAlreadyExistsException) {
                 throw new RuntimeException("No se guardo nuevamente por que ya existe el archivo.");

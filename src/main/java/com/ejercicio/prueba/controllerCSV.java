@@ -43,24 +43,25 @@ public class controllerCSV {
         String message = "";
 
         if (LecturaCsv.hasCSVFormat(file)) {
-            log.info("Si paso el archivo");
+            
             try {
-                String uploadsDir = "/uploads/";
+                String uploadsDir = "/archivos/";
                 String realPathtoUploads =  request.getServletContext().getRealPath(uploadsDir);
-                    
-                fileService.guardar(file);
-                storageService.creardirectorio(realPathtoUploads);
-                storageService.guardararchivo(file,realPathtoUploads);
+                //volcar archivo a BD    
+                //fileService.guardar(file);
+                //Guarda archivo 
+                storageService.creardirectorio();
+                storageService.guardararchivo(file);
 
                 message = "El archivo se volco y creo exitosamente: " + file.getOriginalFilename();
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
             } catch (Exception e) {
-                message = "Ocurrio un problema con el archivo: " + file.getOriginalFilename() + "!";
+                message = "Ocurrio un problema con el archivo: " + file.getOriginalFilename();
                 return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
             }
         }
 
-        message = "Suba un archivo";
+        message = "Suba un archivo con el formato correcto.";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message));
     }
 

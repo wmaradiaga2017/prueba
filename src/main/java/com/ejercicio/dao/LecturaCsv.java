@@ -41,7 +41,7 @@ public class LecturaCsv {
                 CSVParser csvParser = new CSVParser(fileReader,
                         CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
 
-            log.info("Aqui va el archivo");
+            
             List<Archivo> lista = new ArrayList<Archivo>();
 
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
