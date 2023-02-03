@@ -50,7 +50,6 @@ public class controllerCSV {
                 //volcar archivo a BD    
                 //fileService.guardar(file);
                 //Guarda archivo 
-                storageService.creardirectorio();
                 storageService.guardararchivo(file);
 
                 message = "El archivo se volco y creo exitosamente: " + file.getOriginalFilename();

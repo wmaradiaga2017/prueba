@@ -7,11 +7,13 @@ package com.ejercicio.prueba;
 import com.ejercicio.interfaces.FilesStorageService;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,22 +31,22 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class FilesStorageServiceImpl implements FilesStorageService {
 
-    private final Path root = Paths.get("archivos");
-
-    @Override
-    public void creardirectorio() {
-        try {
-            Files.createDirectories(root);
-        } catch (IOException e) {
-            throw new RuntimeException("Problemas al crear el directorio");
-        }
-    }
+    private final File path = new File("src/main/resources/csv/");
 
     @Override
     public void guardararchivo(MultipartFile file) {
 
         try {
-            Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
+            Path uploadPath = Paths.get("Archivos");
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+            try (InputStream inputStream = file.getInputStream()) { 
+                Path filePath = uploadPath.resolve(file.getOriginalFilename());
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException ioe) {       
+                 throw new IOException("No se puede guardar", ioe);
+            }
         } catch (Exception e) {
             if (e instanceof FileAlreadyExistsException) {
                 throw new RuntimeException("No se guardo nuevamente por que ya existe el archivo.");

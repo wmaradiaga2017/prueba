@@ -37,7 +37,6 @@ public class CSVService {
     private ArchivoRepository repository;
 
     public void guardar(MultipartFile file) {
-        log.info("LLega archivo");
         try {
             int lista = recorrerCSV(file.getInputStream());
         } catch (IOException e) {
