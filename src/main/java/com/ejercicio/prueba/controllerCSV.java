@@ -45,10 +45,8 @@ public class controllerCSV {
         if (LecturaCsv.hasCSVFormat(file)) {
             
             try {
-                String uploadsDir = "/archivos/";
-                String realPathtoUploads =  request.getServletContext().getRealPath(uploadsDir);
                 //volcar archivo a BD    
-                //fileService.guardar(file);
+                fileService.guardar(file);
                 //Guarda archivo 
                 storageService.guardararchivo(file);
 
