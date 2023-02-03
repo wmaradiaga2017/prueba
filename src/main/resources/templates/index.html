@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Inicio</title>
+        <meta charset="UTF-8">
+        <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+        <link th:href="@{/css/estilos.css}" rel="stylesheet" />
+        <link th:href="@{/css/notification.css}" rel="stylesheet" />
+        <link th:href="@{/css/plugin/datatable/jquery.dataTables.min.css}" rel="stylesheet" />
+        <link th:href="@{/css/plugin/datatable/buttons.dataTables.min.css}" rel="stylesheet" />
+        <link th:href="@{/css/plugin/sweetalert/sweetalert.css}" rel="stylesheet" />
+        <link th:href="@{/css/plugin/select/select2.min.css}" rel="stylesheet" />
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#"><i class="fas fa-users"></i> Personal</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mynavbar">
+                    <ul class="navbar-nav me-auto">
+                    </ul>
+                    <form class="d-flex">
+                        <button id="btnnuevo" class="btn btn-primary" type="button" onclick="nuevoempleado();"><i class="fas fa-user-plus fa-2x"></i> Nuevo empleado</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+        <div id='content' class='row' style="margin-top: 15px;padding: 50px;">
+            <div class='col-md-12'>
+                <table id="tbpersonal" class="blueTable" style="width: 100% !important;">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Apellidos</th>
+                            <th>Teléfono</th>
+                            <th>Sitio de trabajo</th>
+                            <th>País de residencia</th>
+                            <th>Ciudad de Residencia</th>
+                            <th>Fecha de nacimiento</th>
+                            <th>Edad</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id='formcontent' class='row' style="margin-top: 15px;padding: 50px;display:none;">
+            <div class='col-md-12'>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-user-plus fa-4x"></i> Nuevo empleado</h5>
+                        <div class='row'>
+                            <div class='col-md-6'>
+                                <div class="mb-3 mt-3">
+                                    <label for="nombre" class="form-label">Nombre:</label>
+                                    <input type="text" maxlength="150" class="form-control" id="nombre" placeholder="Nombre" name="nombre">
+                                </div>
+                                <div class="mb-3 mt-3">
+                                    <label for="apellidos" class="form-label">Apellidos:</label>
+                                    <input type="text" maxlength="150" class="form-control" id="apellidos" placeholder="Apellidos" name="apellidos">
+                                </div>
+                                <div class="mb-3 mt-3">
+                                    <label for="tel" class="form-label">Teléfono:</label>
+                                    <input type="text" class="form-control" id="tel" placeholder="Teléfono" name="tel">
+                                </div>
+                                <div class="mb-3 mt-3">
+                                    <label for="sitio" class="form-label">Sitio de trabajo:</label>
+                                    <input type="text" maxlength="250" class="form-control" id="sitio" placeholder="Sitio de trabajo" name="sitio">
+                                </div>
+                            </div>
+                            <div class='col-md-6'>
+                                <div class="mb-3 mt-3">
+                                    <label for="selectpais" class="form-label">País de residencia:</label>
+                                    <select class="placeholder js-states form-control" name="selectpais" id="selectpais">
+                                        <option value="-1">Seleccionar...</option>
+                                        <option th:each="option : ${paises}" th:value="${option}" th:text="${option}"></option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 mt-3">
+                                    <label for="ciudad" class="form-label">Ciudad de Residencia:</label>
+                                    <input maxlength="150" type="text" class="form-control" id="ciudad" placeholder="Ciudad de Residencia" name="ciudad">
+                                </div>
+                                <div class="mb-3 mt-3">
+                                    <label for="fechanac" class="form-label">Fecha de nacimiento:</label>
+                                    <input type="date" class="form-control" id="fechanac" placeholder="Fecha de nacimiento" name="fechanac">
+                                </div>
+                                <div class="btn-group">
+                                    <button type="button" id="btnguardar" class="btn btn-primary" onclick="guardarempleado()">Guardar empleado</button>
+                                    <button type="button" style="display:none;" id="btnedit" class="btn btn-info" onclick="updateempleado()" >Editar empleado</button>
+                                    <button type="button" class="btn btn-danger" onclick="resetempleado()">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>  
+        <script type="text/javascript" th:src="@{/js/plugin/datatable/jquery.dataTables.min.js}"></script>  
+        <script type="text/javascript" th:src="@{/js/plugin/datatable/dataTables.buttons.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/plugin/datatable/jszip.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/plugin/datatable/pdfmake.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/plugin/datatable/vfs_fonts.js}"></script> 
+        <script type="text/javascript" th:src="@{/js/plugin/datatable/buttons.html5.min.js}"></script> 
+        <script type="text/javascript" th:src="@{/js/plugin/datatable/buttons.print.min.js}"></script> 
+        <script type="text/javascript" th:src="@{/js/plugin/sweetalert/sweetalert.min.js}"></script> 
+        <script src="https://kit.fontawesome.com/72e595df60.js" crossorigin="anonymous"></script>
+        <script type="text/javascript" th:src="@{/js/jquery.toast.js}"></script>
+        <script type="text/javascript" th:src="@{/js/notification.js}"></script>
+        <script type="text/javascript" th:src="@{/js/plugin/select/select2.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/jquery.inputmask.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/bootstrap-growl.min.js}"></script>        
+        <script type="text/javascript" th:src="@{/js/index.js}"></script>
+    </body>
+</html>
